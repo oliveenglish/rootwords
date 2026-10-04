@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Root Words Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+  /* Layout: single column story, hero with a live word-splitter, then curriculum grid, routine, stamp board, join card */
+  :root{
+    --bg:#F7F3E8; --bg2:#F0EBDD; --surface:#FFFDF8; --ink:#20365A; --muted:#5E6B7E;
+    --green:#4A9F72; --sage:#E3E9DA; --mustard:#E4C13D; --coral:#E95A43; --line:#E2DCCB;
+    --onGreen:#FFFFFF;
+    --display:"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --body:"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#141C28; --bg2:#1A2433; --surface:#1F2B3D; --ink:#EEF1F6; --muted:#A6B1C2;
+    --green:#5CBF8A; --sage:#25362F; --mustard:#E8C64F; --coral:#F07862; --line:#2E3B50; --onGreen:#0F1A14; color-scheme:dark }}
+  :root[data-theme="dark"]{
+    --bg:#141C28; --bg2:#1A2433; --surface:#1F2B3D; --ink:#EEF1F6; --muted:#A6B1C2;
+    --green:#5CBF8A; --sage:#25362F; --mustard:#E8C64F; --coral:#F07862; --line:#2E3B50; --onGreen:#0F1A14; color-scheme:dark }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7;margin:0;padding-inline:20px;word-break:keep-all}
+  .wrap{max-width:880px;margin:0 auto}
+  section{padding-block:56px;border-top:1px solid var(--line)}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.3}
+  h2{font-size:clamp(24px,4vw,32px);font-weight:900}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:10px}
+  p{margin:0}
+  .lead{color:var(--muted);max-width:60ch;margin-top:12px}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--mustard);outline-offset:3px;border-radius:6px}
+
+  /* nav */
+  .top{display:flex;justify-content:space-between;align-items:center;padding-block:20px;gap:12px;flex-wrap:wrap}
+  .brand{font-weight:900;font-size:15px}
+  .brand span{color:var(--green)}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:var(--onGreen);text-decoration:none;font-weight:700;padding:12px 20px;border-radius:999px;border:0;font-family:inherit;font-size:15px;cursor:pointer}
+  .btn:hover{filter:brightness(1.07)}
+  .btn.small{padding:8px 14px;font-size:13px}
+
+  /* hero */
+  .hero{padding-block:36px 64px;border-top:0}
+  .hero h1{font-size:clamp(34px,7vw,60px);font-weight:900;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--green)}
+  .splitter{margin-top:32px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px 24px}
+  .sp-word{font-family:var(--mono);font-weight:700;font-size:clamp(30px,7vw,52px);display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;min-height:1.6em}
+  .piece{display:flex;flex-direction:column;align-items:center;transition:transform .35s ease, margin .35s ease}
+  .piece b{font-weight:700;padding:0 2px;border-bottom:4px solid transparent;transition:border-color .35s}
+  .piece small{font-family:var(--body);font-size:13px;font-weight:700;color:var(--muted);opacity:0;transform:translateY(-4px);transition:opacity .35s, transform .35s;white-space:nowrap}
+  .split .piece{margin-right:14px}
+  .split .piece b{border-color:currentColor}
+  .split .piece small{opacity:1;transform:none}
+  .p0{color:var(--coral)} .p1{color:var(--green)} .p2{color:var(--mustard)} .p3{color:var(--ink)}
+  .sp-meaning{margin-top:18px;font-size:17px;min-height:1.7em}
+  .sp-meaning strong{color:var(--green)}
+  .sp-controls{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+  .ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);padding:10px 16px;border-radius:999px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer}
+  .ghost:hover{border-color:var(--green)}
+  .hero-cta{display:flex;gap:16px;align-items:center;margin-top:28px;flex-wrap:wrap}
+  .hero-cta span{color:var(--muted);font-size:14px}
+
+  /* methods */
+  .methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:28px}
+  .m{padding:16px;border-radius:14px;background:var(--bg2);font-size:14px}
+  .m b{display:block;font-size:15px;margin-bottom:2px}
+  .m.first{background:var(--green);color:var(--onGreen)}
+  .m.first b::after{content:"  지금 진행 중";font-weight:500;font-size:12px;opacity:.85}
+
+  /* curriculum */
+  .weeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:28px}
+  .wk{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .wk-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .wk-n{font-family:var(--mono);font-weight:700;color:var(--green);font-size:13px}
+  .wk-t{font-size:12px;color:var(--muted)}
+  .wk h3{font-size:17px;margin-top:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .chip{font-family:var(--mono);font-size:13px;font-weight:700;padding:4px 10px;border-radius:8px;background:var(--sage)}
+  .note{margin-top:18px;font-size:14px;color:var(--muted)}
+  .note code{font-family:var(--mono);color:var(--ink);font-weight:700}
+
+  /* routine */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:28px;counter-reset:s}
+  .step{padding:20px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+  .step::before{counter-increment:s;content:counter(s);font-family:var(--mono);font-weight:700;font-size:13px;color:var(--onGreen);background:var(--green);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .step h3{font-size:17px}
+  .step p{font-size:14px;color:var(--muted);margin-top:4px}
+  .step .min{font-family:var(--mono);font-size:12px;color:var(--green);font-weight:700}
+  .rhythm{margin-top:20px;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em}
+  td:first-child{font-weight:700;white-space:nowrap}
+
+  /* stamps */
+  .stamp-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;margin-top:28px;align-items:start}
+  @media (max-width:720px){.stamp-wrap{grid-template-columns:1fr}}
+  .board{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px}
+  .board-h{display:flex;justify-content:space-between;align-items:baseline}
+  .board-h b{font-size:28px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+  .board-h > span{font-size:13px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:52px repeat(5,1fr);gap:6px;margin-top:14px;font-size:11px;color:var(--muted);align-items:center}
+  .grid .hd{text-align:center}
+  .cell{aspect-ratio:1;max-width:100%;border-radius:50%;border:1.5px dashed var(--line);position:relative}
+  .cell.on::after{content:"OLIVE";position:absolute;inset:2px;border-radius:50%;border:2.5px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:8px;transform:rotate(-14deg);background:color-mix(in srgb,var(--green) 12%,transparent)}
+  .cell.today{border:2px solid var(--mustard)}
+  .board small{display:block;margin-top:12px;font-size:12px;color:var(--muted)}
+  .rules{display:flex;flex-direction:column;gap:14px}
+  .rule{display:flex;gap:12px}
+  .rule i{flex:none;width:8px;border-radius:4px;background:var(--green)}
+  .rule:nth-child(2) i{background:var(--mustard)} .rule:nth-child(3) i{background:var(--coral)}
+  .rule b{display:block}
+  .rule p{font-size:14px;color:var(--muted)}
+  .tiers{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .tier{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);font-variant-numeric:tabular-nums}
+
+  /* change */
+  .changes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:28px}
+  .ch{padding:20px;border-radius:16px;background:var(--sage)}
+  .ch .before{font-size:13px;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--coral)}
+  .ch .after{font-weight:700;margin-top:6px}
+  .mult{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding:24px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
+  .mult-num{display:flex;flex-direction:column}
+  .mult-num b{font-family:var(--mono);font-size:clamp(32px,6vw,48px);line-height:1.1;color:var(--muted)}
+  .mult-num.big b{color:var(--green)}
+  .mult-num span{font-size:14px;color:var(--muted)}
+  .mult-arrow{font-size:28px;color:var(--mustard);font-weight:900}
+  .src{font-size:12px;color:var(--muted);margin-top:8px}
+  .goal{margin-top:24px;font-size:18px;font-weight:700}
+  .goal span{color:var(--green)}
+
+  /* join */
+  .join{background:var(--ink);color:var(--bg);border-radius:24px;padding:32px 24px;margin-top:8px}
+  .join h2{color:var(--bg)}
+  .join dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px 16px;margin:24px 0 0}
+  .join dt{font-size:13px;opacity:.7;font-weight:700}
+  .join dd{margin:0}
+  .join .btn{margin-top:26px}
+  .pilot{margin-top:14px;padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--bg) 12%,transparent);font-size:15px}
+  .join .hint{font-size:13px;opacity:.7;margin-top:10px}
+  @media (max-width:480px){.join dl{grid-template-columns:1fr;gap:2px}.join dd{margin-bottom:10px}}
+
+  .next{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .next span{font-size:14px;padding:8px 14px;border-radius:999px;border:1.5px dashed var(--line);color:var(--muted)}
+  .next span:first-child{border-style:solid;border-color:var(--green);color:var(--green);font-weight:700}
+  .next span.nx{border-style:solid;border-color:var(--mustard);color:var(--ink);font-weight:700}
+  footer{padding-block:32px 48px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);margin-top:56px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <nav class="top">
+    <div class="brand"><span>Olive</span> English Academy</div>
+    <a class="btn small kakao" href="#join">문의하기</a>
+  </nav>
+
+  <header class="hero">
+    <div class="eyebrow">Vocab Challenge · Root Words</div>
+    <h1>긴 단어도<br><em>쪼개면 보여요.</em></h1>
+    <p class="lead">하루 10분, 6주. 접두어·접미어·어근 24개로 처음 보는 단어의 뜻을 짐작하는 힘을 기르는 어휘 챌린지예요.</p>
+
+    <div class="splitter" aria-live="polite">
+      <div class="sp-word" id="spWord"></div>
+      <p class="sp-meaning" id="spMeaning"></p>
+      <div class="sp-controls">
+        <button class="btn small" id="spSplit" type="button">쪼개 보기</button>
+        <button class="ghost" id="spNext" type="button">다른 단어</button>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a class="btn kakao" href="#join">참여 문의하기</a>
+    </div>
+  </header>
+
+  <section id="why">
+    <div class="eyebrow">Our Vocabulary Path</div>
+    <h2>올리브영어가 그리는 어휘 공부의 길</h2>
+    <p class="lead">어휘 공부는 한 가지 방법으로 끝나지 않아요. 올리브영어는 아래 다섯 갈래를 하나씩 챌린지로 열어 갈 거예요. 그 첫 번째가 이번 <b>Root Words</b>예요.</p>
+    <div class="methods">
+      <div class="m first"><b>Root Words</b>접두어·접미어·어근</div>
+      <div class="m"><b>Collocation</b>함께 다니는 단어 짝</div>
+      <div class="m"><b>시험 빈출 어휘</b>시험에 자주 나오는 단어</div>
+      <div class="m"><b>헷갈리는 스펠링</b>따로 정리하기</div>
+      <div class="m"><b>주제별 어휘</b>교과 주제별 단어 늘리기</div>
+    </div>
+    <p class="note">챌린지는 계속 확장돼요. Root Words로 단어를 보는 눈을 먼저 만들고, 그 위에 나머지 갈래를 차례로 쌓아 갑니다.</p>
+  </section>
+
+  <section id="curriculum">
+    <div class="eyebrow">6-Week Curriculum</div>
+    <h2>6주 동안 24개 조각, 120단어</h2>
+    <p class="lead">익숙한 접두어에서 시작해 접미어를 거쳐, 마지막 2주는 라틴어 어근으로 올라가요. 하루에 조각 1개와 단어 5개를 배워요.</p>
+    <div class="weeks" id="weeks"></div>
+    <p class="note">5·6주차에는 앞에서 배운 조각이 다시 나와요. <code>invisible</code> = in + vis + ible, <code>interrupt</code> = inter + rupt. "이거 배운 거다!" 하고 알아보는 순간이 이 챌린지의 핵심이에요.</p>
+  </section>
+
+  <section id="routine">
+    <div class="eyebrow">How it works</div>
+    <h2>하루 10분이면 충분해요</h2>
+    <div class="steps">
+      <div class="step"><span class="min">3분</span><h3>단어 카드 읽기</h3><p>오늘의 조각과 단어 5개, 뜻과 예문을 소리 내어 읽어요.</p></div>
+      <div class="step"><span class="min">5분</span><h3>워크시트 1장 풀기</h3><p>단어 쪼개기 → 뜻 연결 → 빈칸 채우기 → 보너스 퀴즈.</p></div>
+      <div class="step"><span class="min">2분</span><h3>사진 찍어 앱에 제출</h3><p>올리브 숙제 앱에 올리면 끝.</p></div>
+    </div>
+    <div class="rhythm">
+      <table>
+        <thead><tr><th>요일</th><th>학생</th><th>선생님</th></tr></thead>
+        <tbody>
+          <tr><td>월 ~ 목</td><td>새 조각 1개 + 단어 5개 워크시트</td><td>정답 확인 후 도장, 틀린 부분은 짧은 메모</td></tr>
+          <tr><td>금</td><td>한 주 복습 + 내 문장 2개 쓰기</td><td>채점과 점수 기록, 주간 배지</td></tr>
+          <tr><td>6주차 금</td><td>최종 테스트</td><td>채점과 피드백</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="stamps">
+    <div class="eyebrow">Submit &amp; Stamp</div>
+    <h2>매일 쌓이는 도장이 습관이 돼요</h2>
+    <div class="stamp-wrap">
+      <div class="board" aria-label="도장판 예시">
+        <div class="board-h"><b><span id="stampCount">0</span> / 30</b><span>예시 화면 · 2주차 수요일</span></div>
+        <div class="grid" id="grid"></div>
+        <small>학생 앱에서 보이는 도장판 예시예요.</small>
+      </div>
+      <div class="rules">
+        <div class="rule"><i></i><div><b>밤 10시까지 내면 도장 1개</b><p>늦게 내도 받아주지만 그날 도장은 없어요. 놓친 날은 주말에 몰아서 낼 수 있어요.</p></div></div>
+        <div class="rule"><i></i><div><b>선생님이 직접 확인해요</b><p>자동 채점이 아니에요. 틀린 단어는 왜 틀렸는지 한 줄 메모로 짚어줘요.</p></div></div>
+        <div class="rule"><i></i><div><b>도장판에서 내 꾸준함이 보여요</b><p>학생 앱에서 지금까지 모은 도장을 바로 확인할 수 있어요.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="change">
+    <div class="eyebrow">After 6 weeks</div>
+    <h2>6주 뒤, 이렇게 달라져요</h2>
+    <div class="changes">
+      <div class="ch"><p class="before">모르는 긴 단어는 그냥 넘어간다</p><p class="after">긴 단어를 보면 먼저 쪼개 본다</p></div>
+      <div class="ch"><p class="before">뜻을 모르면 사전부터 찾는다</p><p class="after">조각의 뜻으로 의미를 짐작한다</p></div>
+      <div class="ch"><p class="before">영어는 수업 날에만 한다</p><p class="after">매일 10분, 영어를 손에서 놓지 않는다</p></div>
+    </div>
+    <div class="mult">
+      <div class="mult-num"><b>120</b><span>단어를 배우지만</span></div>
+      <div class="mult-arrow">→</div>
+      <div class="mult-num big"><b>3배 이상</b><span>의 단어를 짐작할 수 있어요</span></div>
+    </div>
+    <p class="lead">단어 하나를 알면, 같은 조각을 공유하는 파생어를 평균 3개 이상 더 이해할 수 있다고 해요. 또 초등 3학년 이후 아이들이 읽는 글 속 단어의 약 60%가 접두어·접미어·어근으로 만들어져 있어요. 조각을 익히면 비슷한 패턴의 단어를 만났을 때 스스로 뜻을 유추하는 힘이 생기고, 아는 어휘가 배운 것보다 훨씬 넓게 확장돼요.</p>
+    <p class="src">출처: Nagy &amp; Anderson (1984), Manyak et al. (2018) 재인용</p>
+    <p class="goal">단어 120개를 외우는 것보다, <span>단어를 보는 눈이 달라지는 것</span>이 목표예요.</p>
+  </section>
+
+  <section id="join" style="border-top:0">
+    <div class="join">
+      <div class="eyebrow" style="color:var(--mustard)">Join</div>
+      <h2>참여 안내</h2>
+      <p class="pilot">참여를 희망하시면 <b>카카오톡 채널</b>로 문의해 주세요.</p>
+      <dl>
+        <dt>대상</dt><dd>국제학교·현지학교 G3 / P3 이상<br>한국 학교 초등 5학년 이상</dd>
+        <dt>기간</dt><dd>6주, 주 5일 · 하루 10분</dd>
+        <dt>제출</dt><dd>올리브 숙제 앱</dd>
+        <dt>문의</dt><dd>카카오톡 채널 (올리브영어)</dd>
+        <dt>자료</dt><dd>단어 카드, 매일 워크시트, 주간 복습지, 최종 테스트</dd>
+      </dl>
+      <a class="btn kakao" id="kakaoBtn" href="#join">카카오톡 채널로 문의하기</a>
+      <p class="hint" id="kakaoHint"></p>
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="eyebrow">What's next</div>
+    <h2>다음 챌린지는 Collocation</h2>
+    <p class="lead">Root Words 다음에는 함께 다니는 단어 짝, Collocation으로 넘어가요. <i>make a decision</i>, <i>heavy rain</i>처럼 원어민이 자연스럽게 쓰는 단어 조합을 익혀서 글과 말이 한층 자연스러워지도록 할 거예요. 인스타그램에서 다음 챌린지 소식을 함께해요.</p>
+    <div class="next"><span>Root Words · 지금</span><span class="nx">Collocation · 다음</span><span>시험 빈출 어휘</span><span>헷갈리는 스펠링</span><span>주제별 어휘</span></div>
+  </section>
+
+  <footer>Olive English Academy · 올리브영어 아카데미</footer>
+</div>
+
+<script>
+  // Fill in the KakaoTalk link here when ready.
+  const KAKAO_URL = "http://pf.kakao.com/_xcZPxkn/chat";
+  if (KAKAO_URL) {
+    document.querySelectorAll(".kakao").forEach(a => { a.href = KAKAO_URL; a.target = "_blank"; a.rel = "noopener"; });
+    document.getElementById("kakaoHint").hidden = true;
+  }
+
+  // word splitter
+  const WORDS = [
+    { parts:[["in","not"],["vis","see"],["ible","can be"]], mean:"<strong>invisible</strong> = 볼 수 없는, 보이지 않는" },
+    { parts:[["inter","between"],["rupt","break"]], mean:"<strong>interrupt</strong> = 사이를 깨고 들어오다 → 끼어들다" },
+    { parts:[["un","not"],["pre","before"],["dict","say"],["able","can be"]], mean:"<strong>unpredictable</strong> = 미리 말할 수 없는 → 예측할 수 없는" },
+    { parts:[["port","carry"],["able","can be"]], mean:"<strong>portable</strong> = 나를 수 있는 → 휴대용의" },
+    { parts:[["con","together"],["struct","build"],["ion","act of"]], mean:"<strong>construction</strong> = 함께 짓는 일 → 건설, 공사" },
+  ];
+  let wi = 0, split = false;
+  const spWord = document.getElementById("spWord"), spMeaning = document.getElementById("spMeaning"), spSplit = document.getElementById("spSplit");
+  function drawWord(){
+    const w = WORDS[wi];
+    spWord.className = "sp-word" + (split ? " split" : "");
+    spWord.innerHTML = w.parts.map((p,i) => `<span class="piece p${i}"><b>${p[0]}</b><small>${p[1]}</small></span>`).join("");
+    spMeaning.innerHTML = split ? w.mean : "처음 보는 단어도, 조각을 알면 뜻이 보여요.";
+    spSplit.textContent = split ? "다시 붙이기" : "쪼개 보기";
+  }
+  spSplit.addEventListener("click", () => { split = !split; drawWord(); });
+  document.getElementById("spNext").addEventListener("click", () => { wi = (wi + 1) % WORDS.length; split = false; drawWord(); setTimeout(() => { split = true; drawWord(); }, 450); });
+  drawWord();
+  setTimeout(() => { split = true; drawWord(); }, 900);
+
+  // curriculum
+  const WEEKS = [
+    ["접두어 ①","Not & Again",["un-","dis-","re-","mis-"]],
+    ["접두어 ②","Where & When",["pre-","sub-","inter-","ex-"]],
+    ["접미어 ①","형용사 만들기",["-ful","-less","-able","-ous"]],
+    ["접미어 ②","명사 만들기",["-ness","-ment","-tion","-er/-or"]],
+    ["어근 ①","See, Hear, Say",["spect","vis/vid","aud","dict"]],
+    ["어근 ②","Carry, Build, Break, Write",["port","struct","rupt","scrib/script"]],
+  ];
+  document.getElementById("weeks").innerHTML = WEEKS.map((w,i) =>
+    `<div class="wk"><div class="wk-h"><span class="wk-n">WEEK ${i+1}</span><span class="wk-t">${w[0]}</span></div><h3>${w[1]}</h3><div class="chips">${w[2].map(c=>`<span class="chip">${c}</span>`).join("")}</div></div>`).join("");
+
+  // stamp board example: week 1 full except Thu, week 2 Mon-Tue, today = week2 Wed
+  const grid = document.getElementById("grid");
+  const on = new Set(["0-0","0-1","0-2","0-4","1-0","1-1"]);
+  let html = "<div></div>" + ["월","화","수","목","금"].map(d=>`<div class="hd">${d}</div>`).join("");
+  for (let w=0; w<6; w++){
+    html += `<div>Week ${w+1}</div>`;
+    for (let d=0; d<5; d++){ const k = `${w}-${d}`; html += `<div class="cell ${on.has(k)?"on":""} ${k==="1-2"?"today":""}"></div>`; }
+  }
+  grid.innerHTML = html;
+  document.getElementById("stampCount").textContent = on.size;
+</script>
+
+</body>
+</html>
